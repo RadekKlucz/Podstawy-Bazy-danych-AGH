@@ -295,3 +295,31 @@ with rec(x)  as (
     select x+1 from rec where x<10
 )
 select x from rec;
+
+USE joindb
+
+SELECT a.buyer_id AS buyer1, a.prod_id, b.buyer_id AS buyer2
+FROM sales AS a
+INNER JOIN sales AS b
+ON a.prod_id = b.prod_id WHERE a.buyer_id <> b.buyer_id
+
+-- Union 
+
+USE Northwind2;
+
+SELECT (firstname + ' ' + lastname) AS name, city, postalcode
+FROM employees
+UNION
+SELECT companyname, city, postalcode
+FROM customers
+
+-- 1. Napisz polecenie które zwraca imię i nazwisko (jako pojedynczą kolumnę –
+--  name), oraz informacje o adresie: ulica, miasto, stan kod (jako pojedynczą
+--  kolumnę – address) dla wszystkich dorosłych członków biblioteki
+
+USE library2;
+
+SELECT CONCAT(firstname, ' ', lastname) AS name, CONCAT(street, ' ', city, ' ', state, ' ', zip) AS ADDRESS FROM member 
+INNER JOIN adult ON member.member_no = adult.member_no;
+
+

@@ -47,6 +47,12 @@ SET @id = (SELECT CategoryID FROM Categories WHERE CategoryName = 'Meat/Poultry'
 -- podstawienie znalezionej zmiennej 
 SELECT ProductName, UnitPrice FROM Products WHERE CategoryID = @id;
 
+USE Northwind2
+
+SELECT ProductName, UnitPrice
+FROM Products join Categories C on C.CategoryID = Products.CategoryID
+where CategoryName ='Meat/Poultry'
+
 USE Northwind SELECT * FROM Categories; -- kategoria meat ma oznaczenie 6
 USE Northwind SELECT ProductName, UnitPrice FROM Products WHERE CategoryID = 6;
 --5
@@ -187,6 +193,10 @@ SELECT DISTINCT member_no, isbn, fine_assessed * 2 AS 'double fine' FROM loanhis
 
 --Ex.4
 --1 
+
+SELECT DISTINCT CONCAT(firstname,' ', middleinitial, ' ', lastname) AS NAME FROM member WHERE lastname = 'Anderson' ORDER BY NAME DESC 
+
+SELECT LOWER(CONCAT(firstname, middleinitial, SUBSTRING(lastname, 1, 2))) AS EMAIL_NAME FROM member WHERE lastname = 'Anderson';
 
 USE library2 SELECT LOWER(SUBSTRING(firstname, 1, 1) + middleinitial + SUBSTRING(lastname, 1, 2)) AS 'email_name' FROM member 
 	WHERE lastname = 'Anderson';

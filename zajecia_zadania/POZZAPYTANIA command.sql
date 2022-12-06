@@ -59,4 +59,10 @@ SELECT LastName, EmployeeID FROM Employees AS E WHERE EmployeeID IN (SELECT Empl
 
 SELECT * FROM T;
 
+SELECT lastname, employeeid
+FROM employees AS e
+WHERE EXISTS (SELECT * FROM orders AS o
+WHERE e.employeeid = o.employeeid
+AND o.orderdate = '9/5/97')
+GO
 

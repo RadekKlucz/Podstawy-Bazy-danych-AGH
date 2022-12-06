@@ -67,7 +67,7 @@ SELECT ProductName, UnitPrice FROM Products WHERE UnitPrice BETWEEN 20 AND 30;
 
 Listy wartości: 
 - IN
-   NOT IN
+- NOT IN
 
 Przykład: 
 ```SQL
@@ -95,12 +95,12 @@ Do nadania nowej nazwy kolumnie itp stosujemy **AS**, przykład:
 ```SQL
 USE northwind; -- to do wskazania z której bazy korzystamy 
 
-SELECT orderid, unitprice * 1.05 as newunitprice FROM [order details];
+SELECT orderid, unitprice * 1.05 AS NewUnitPrice FROM [order details];
 ```
 
 Operacje na napisach: 
 ```SQL
-SELECT firstname + ` ` + lastname as imie_nazwisko FROM employees;
+SELECT firstname + ` ` + lastname AS imie_nazwisko FROM employees;
 ```
 
 lub można za pomocą funkcji **CONCAT** złączyć dwie tabele: 
@@ -305,6 +305,18 @@ SELECT Orders.OrderID, Customers.CustomerName, Orders.OrderDate
 FROM Orders
 INNER JOIN Customers ON Orders.CustomerID = Customers.CustomerID;
 ```
+Napisz polecenie zwracające listę produktów zamawianych w dniu 1996-07-08
+```SQL
+SELECT orderdate, productname
+FROM orders AS O
+INNER JOIN [order details] AS OD
+ON O.orderid = OD.orderid
+INNER JOIN products AS P
+ON OD.productid = P.productid
+WHERE orderdate = ‘7/8/96’
+```
+
+Jak widać powyżej musimy przejść przez tabele Order Details żeby móc dostać się do Order Date. 
 
 ### OUTER JOIN
 
@@ -341,6 +353,109 @@ FROM table1
 RIGHT JOIN table2
 ON table1.column_name = table2.column_name;
 ```
+
+### CROSS JOIN
+
+The SQL CROSS JOIN produces a result set which is the number of rows in the first table multiplied by the number of rows in the second table if no WHERE clause is used along with CROSS JOIN.This kind of result is called as Cartesian Product.
+
+If WHERE clause is used with CROSS JOIN, it functions like an INNER JOIN.
+
+![CROSS JOIN](cross-join-round.png)
+
+```SQL
+SELECT suppliers.companyname, shippers.companyname
+FROM suppliers
+CROSS JOIN shippers
+```
+
+### Łączenie tabeli samej ze sobą – self join
+Napisz polecenie, które wyświetla listę wszystkich kupujących te 
+same produkty.
+```SQL
+SELECT a.buyer_id AS buyer1, a.prod_id, b.buyer_id AS buyer2
+FROM sales AS a
+INNER JOIN sales AS b
+ON a.prod_id = b.prod_id
+```
+Bez duplikatów. Nieważne czy damy <> lub znaki <, >, bo wynik jest ten sam. 
+
+```SQL
+SELECT a.buyer_id AS buyer1, a.prod_id, b.buyer_id AS buyer2
+FROM sales AS a
+INNER JOIN sales AS b ON a.prod_id = b.prod_id 
+WHERE a.buyer_id <> b.buyer;
+```
+
+## Łączenie kilku zbiorów wynikowych 
+- Użyj operatora UNION do tworzenia pojedynczego zbioru 
+wynikowego z wielu zapytań
+- Każde zapytanie musi mieć:
+  - Zgodne typy danych
+  - Taką samą liczbę kolumn – Taki sam porządek kolumn w select-list
+
+```SQL
+SELECT (firstname + ' ' + lastname) AS name, city, postalcode
+FROM employees
+UNION
+SELECT companyname, city, postalcode
+FROM customers;
+```
+
+Co w wyniku? Te same dane z dwóch różnych tabel. 
+
+## Podzapytania do tabel 
+
+W miejscu w którym możemy użyć nazwy tabeli, możemy użyć podzapytania
+```SQL
+SELECT T.orderid, T.customerid
+FROM ( SELECT orderid, customerid FROM orders ) AS  T;
+```
+
+- Podzapytanie zwraca pojedynczą wartość
+- Podzapytanie może być traktowane jako wyrażenie
+  - może pojawić się na liście polecenia select
+  - może się pojawić w warunku
+
+```SQL
+SELECT productname, price, ( SELECT AVG(price) FROM products) AS average,
+price-(SELECT AVG(price) FROM products) AS difference
+FROM products;
+```
+
+```SQL
+SELECT productname, price, (SELECT AVG(unitprice) FROM products) AS average, unitprice-(SELECT AVG(price) FROM products) AS difference
+FROM products
+WHERE unitprice > ( SELECT AVG(unitprice) FROM products) 
+```
+
+### Podzapytanie skolerowane 
+
+![podzapytania](skolerowane.jpg)
+
+## Operatory EXISTS, NOT EXISTS
+
+- Zewnętrzne zapytanie testuje wystąpienie (lub nie) zbioru wynikowego określonego przez zapytanie wewnętrzne
+  - zapytanie wewnętrzne zwraca TRUE lub FALSE
+
+```SQL
+SELECT lastname, employeeid
+FROM employees AS e
+WHERE EXISTS (SELECT * FROM orders AS o WHERE e.employeeid = o.employeeid
+AND o.orderdate = '9/5/97')
+```
+
+## Przydatne funkcje i informacje 
+
+Data w Northwind jest odwrotna tzn. miesiąc jest pierwszy, a później jest dzień! 
+
+- LOWER(text)
+- UPPER(text)
+- SUBSTRING(string, start, length)
+- YEAR(date)
+- MONTH(date)
+- DAY(date)
+- REPLACE(string, old_string, new_string)
+- CONCAT(string1, string2, ...., string_n)
 
 # KURS SQL
 
