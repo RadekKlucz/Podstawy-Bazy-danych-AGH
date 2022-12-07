@@ -16,7 +16,10 @@ Operatory porównań:
   
 Przykład:
 ```SQL
-USE Northwind SELECT ProductName, UnitPrice FROM Products WHERE UnitPrice >= 20 AND UnitPrice <= 30;
+USE Northwind 
+SELECT ProductName, UnitPrice 
+FROM Products 
+WHERE UnitPrice >= 20 AND UnitPrice <= 30;
 ```
 Porównywanie napisów: 
 - LIKE
@@ -49,7 +52,9 @@ Operatory logiczne,łączenie warunków:
 
 Przykład: 
 ```SQL
-$ SELECT ProductName, UnitPrice FROM Ccustomers WHERE Country = 'France' OR Country = 'Spain';
+SELECT ProductName, UnitPrice 
+FROM Ccustomers 
+WHERE Country = 'France' OR Country = 'Spain';
 ```
 
 Operator logiczny:  
@@ -62,7 +67,9 @@ Zakres wartości:
 Przykład:
 
 ```SQL
-SELECT ProductName, UnitPrice FROM Products WHERE UnitPrice BETWEEN 20 AND 30;
+SELECT ProductName, UnitPrice 
+FROM Products 
+WHERE UnitPrice BETWEEN 20 AND 30;
 ```
 
 Listy wartości: 
@@ -71,7 +78,9 @@ Listy wartości:
 
 Przykład: 
 ```SQL
-SELECT ProductName, UnitPrice FROM Customers WHERE Country IN ('France', 'Spain');
+SELECT ProductName, UnitPrice 
+FROM Customers 
+WHERE Country IN ('France', 'Spain');
 ```
 
 Nieznane wartości: 
@@ -80,7 +89,9 @@ Nieznane wartości:
 
 Przykład:
 ```SQL
-SELECT companyname, fax FROM suppliers WHERE fax IS NULL;
+SELECT companyname, fax 
+FROM suppliers 
+WHERE fax IS NULL;
 ```
 
 ## Zmienne oraz aliasy
@@ -88,25 +99,30 @@ Deklarowanie zmiennej i ustawianie jej wartosci:
 ```SQL
 DECLARE @zmienna INT 
 
-SET @zmienna = (SELECT CategoryID FROM Categories WHERE CategoryName = 'Meat/Poultry');
+SET @zmienna = (SELECT CategoryID 
+                FROM Categories 
+                WHERE CategoryName = 'Meat/Poultry');
 ```
 
 Do nadania nowej nazwy kolumnie itp stosujemy **AS**, przykład:
 ```SQL
 USE northwind; -- to do wskazania z której bazy korzystamy 
 
-SELECT orderid, unitprice * 1.05 AS NewUnitPrice FROM [order details];
+SELECT orderid, unitprice * 1.05 AS NewUnitPrice 
+FROM [order details];
 ```
 
 Operacje na napisach: 
 ```SQL
-SELECT firstname + ` ` + lastname AS imie_nazwisko FROM employees;
+SELECT firstname + ` ` + lastname AS imie_nazwisko 
+FROM employees;
 ```
 
 lub można za pomocą funkcji **CONCAT** złączyć dwie tabele: 
 
 ```SQL
-SELECT SupplierID, CONCAT(Phone, ', ', Fax) AS PhoneWithFax FROM Suppliers;
+SELECT SupplierID, CONCAT(Phone, ', ', Fax) AS PhoneWithFax 
+FROM Suppliers;
 ```
 
 ## ORDER BY 
@@ -116,7 +132,9 @@ The ORDER BY keyword is used to sort the result-set in **ascending** or **descen
 The ORDER BY keyword sorts the records in ascending order by default. To sort the records in descending order, use the DESC keyword.
 
 ```SQL
-SELECT column1, column2, ... FROM table_name ORDER BY column1, column2, ... ASC|DESC;
+SELECT column1, column2, ... 
+FROM table_name 
+ORDER BY column1, column2, ... ASC|DESC;
 ```
 
 ## Eliminacja duplikatów w wynikowym zbiorze
@@ -124,7 +142,9 @@ SELECT column1, column2, ... FROM table_name ORDER BY column1, column2, ... ASC|
 Przykład **DISTINCT**:
 
 ```SQL
-SELECT DISTINCT Country FROM suppliers ORDER BY country;
+SELECT DISTINCT Country 
+FROM suppliers 
+ORDER BY country;
 ```
 ## Ciekawe zadanko, part 1
 **Polecenie:  Napisz polecenie, które oblicza wartość każdej pozycji zamówienia o numerze 10250**
@@ -187,7 +207,8 @@ Czyli zwróci dodatkowo 5 elementów takich jak ostatni element. Np ostatni to w
 Zlicza nam liczbę wierszy. Użyteczne na przykład do liczenia wierszy spełniający jakiś warunek
 
 ```SQL
-SELECT COUNT(*) AS 'Number of rows' FROM Employees;
+SELECT COUNT(*) AS 'Number of rows' 
+FROM Employees;
 ```
 
 ## GROUP BY 

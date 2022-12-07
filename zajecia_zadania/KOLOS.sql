@@ -1,4 +1,6 @@
-﻿-- Zad.1. Wyświetl produkt, który przyniósł najmniejszy, ale niezerowy, przychód w 1996 roku
+﻿-- KOLOS Z WCZESNIEJSZYCH LAT 
+
+-- Zad.1. Wyświetl produkt, który przyniósł najmniejszy, ale niezerowy, przychód w 1996 roku
 
 -- MOJE
 SELECT TOP 1 ProductName, SUM([Order Details].UnitPrice * Quantity * (1 - Discount)) AS DOCHOD FROM Products 
@@ -106,6 +108,30 @@ FROM TABLE1
 RIGHT JOIN Employees ON TABLE1.EmployeeID = Employees.EmployeeID ORDER BY 4
 
 
+
+
+-- KOLOS WTOREK 
+
+/* zad 1)Podaj liczbę̨ zamówień oraz wartość zamówień (bez opłaty za przesyłkę)
+ obsłużonych przez każdego pracownika w marcu 1997. Za datę obsłużenia
+ zamówienia należy uznać datę jego złożenia (orderdate). Jeśli pracownik nie
+ obsłużył w tym okresie żadnego zamówienia, to też powinien pojawić się na liście
+ (liczba obsłużonych zamówień oraz ich wartość jest w takim przypadku równa 0).
+ Zbiór wynikowy powinien zawierać: imię i nazwisko pracownika, liczbę obsłużonych
+zamówień, wartość obsłużonych zamówień, oraz datę najpóźniejszego zamówienia
+(w badanym okresie). (baza northwind) */
+
+USE Northwind2;
+
+SELECT Employees.EmployeeID, FirstName, LastName, COUNT(Orders.OrderID) AS LICZBA_ZAMOWIEN, SUM(UnitPrice * Quantity - (1 - Discount)) AS WARTOSC_ZAMOWIEN
+FROM Employees 
+RIGHT JOIN Orders ON Employees.EmployeeID = Orders.EmployeeID
+FULL OUTER JOIN [Order Details] ON Orders.OrderID = [Order Details].OrderID 
+WHERE YEAR(OrderDate) = 1997 AND MONTH(OrderDate) = 3
+GROUP BY Employees.EmployeeID, FirstName, LastName ORDER BY Employees.EmployeeID;
+
+-- CHYBNA OK
+
 -- zad 2) Podaj listę dzieci będących członkami biblioteki, które w dniu '2001-12-14' nie
 --		zwróciły do biblioteki książki o tytule 'Walking'. Zbiór wynikowy powinien zawierać
 --		imię i nazwisko oraz dane adresowe dziecka. (baza library)
@@ -121,3 +147,20 @@ WHERE member.member_no IN (SELECT member_no FROM loanhist INNER JOIN title ON ti
 
 SELECT member_no, loanhist.title_no, title, due_date, in_date, out_date FROM loanhist INNER JOIN title ON title.title_no = loanhist.title_no WHERE title.title = 'Walking'
 
+--NIE OK 
+
+/*zad 3)
+Dla każdego klienta podaj imię i nazwisko pracownika, który w 1997r obsłużył
+najwięcej jego zamówień, podaj także liczbę tych zamówień (jeśli jest kilku takich
+pracownikow to wystarczy podać imię nazwisko jednego nich). Zbiór wynikowy
+powinien zawierać nazwę klienta, imię i nazwisko pracownika oraz liczbę
+obsłużonych zamówień. (baza northwind)*/
+
+SELECT DISTINCT Customers.CompanyName, Employees.FirstName, Employees.LastName, COUNT(Orders.OrderID) AS LICZBA_ZAMOWIEN FROM Employees 
+INNER JOIN Orders ON Employees.EmployeeID = Orders.EmployeeID 
+INNER JOIN Customers ON Orders.CustomerID = Customers.CustomerID
+WHERE YEAR(Orders.OrderDate) = 1997 
+GROUP BY Customers.CompanyName, Employees.FirstName, Employees.LastName ORDER BY LICZBA_ZAMOWIEN 
+
+
+-- BRAK POMYSLU DALEJ
