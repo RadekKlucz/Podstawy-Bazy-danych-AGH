@@ -16,7 +16,9 @@ Operatory porównań:
   
 Przykład:
 ```SQL
-USE Northwind SELECT ProductName, UnitPrice FROM Products WHERE UnitPrice >= 20 AND UnitPrice <= 30;
+USE Northwind SELECT ProductName, UnitPrice 
+FROM Products 
+WHERE UnitPrice >= 20 AND UnitPrice <= 30;
 ```
 Porównywanie napisów: 
 - LIKE
